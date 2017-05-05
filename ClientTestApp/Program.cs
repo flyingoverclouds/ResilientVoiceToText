@@ -39,8 +39,8 @@ namespace ClientTestApp
 
         static void SimulateFunction()
         {
-            ResilientVttFunctions functions = new ResilientVttFunctions();
-            functions.LaunchVoiceToTExtOnFunctionSimulationSimulate(@"C:\record\audio_1_partial.wav");
+            VoiceToTextOnBlob_Function function = new VoiceToTextOnBlob_Function();
+            function.Simulate(@"C:\record\audio_1.wav");
         }
     }
 }

@@ -51,6 +51,9 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SpeechClient, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\Microsoft.ProjectOxford.SpeechRecognition-x64.1.0.0.3\lib\SpeechClient.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -68,7 +71,7 @@
     <Compile Include="FakeTraceWriter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResilientVttFuntions.cs" />
+    <Compile Include="VoiceToTextOnBlob_Function.cs" />
     <Compile Include="ResilientVttServiceProxy.cs" />
     <Compile Include="ResilientVttTester.cs" />
   </ItemGroup>
