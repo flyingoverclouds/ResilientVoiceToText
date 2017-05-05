@@ -5,6 +5,12 @@ VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientTestApp", "ClientTestApp\ClientTestApp.csproj", "{D34DAEE3-64C0-4FA6-9AA7-E880668884F6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AzureFunction", "AzureFunction", "{ECD746B4-1691-46AB-A99E-55A1C9F7AF2E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resilientSTT", "resilientSTT", "{612D53A2-EE0B-458E-B47A-4329AADBCCAC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VoiceToTextOnBlob", "VoiceToTextOnBlob", "{E52E497D-6FEA-4683-B990-65836C586BEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +24,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{612D53A2-EE0B-458E-B47A-4329AADBCCAC} = {ECD746B4-1691-46AB-A99E-55A1C9F7AF2E}
+		{E52E497D-6FEA-4683-B990-65836C586BEC} = {612D53A2-EE0B-458E-B47A-4329AADBCCAC}
 	EndGlobalSection
 EndGlobal
