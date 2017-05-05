@@ -11,6 +11,14 @@ namespace ClientTestApp
     {
         static void Main(string[] args)
         {
+            //SimulateClient();
+            SimulateFunction();
+            Console.ReadLine();
+        }
+
+
+        static void SimulateClient()
+        {
             Console.WriteLine("Resilient VoiceToText architecture implementation.");
             Console.WriteLine("upload target: " + ConfigurationManager.AppSettings["uploadSasUrl"]);
             Console.WriteLine("apiUrl: " + ConfigurationManager.AppSettings["apiUrl"]);
@@ -27,8 +35,12 @@ namespace ClientTestApp
             {
                 Console.WriteLine("EXCEPTION : " + ex.ToString());
             }
-            Console.ReadLine();
         }
 
+        static void SimulateFunction()
+        {
+            ResilientVttFunctions functions = new ResilientVttFunctions();
+            functions.LaunchVoiceToTExtOnFunctionSimulationSimulate(@"C:\record\audio_1_partial.wav");
+        }
     }
 }
