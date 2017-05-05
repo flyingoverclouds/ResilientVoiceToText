@@ -34,9 +34,12 @@ namespace ClientTestApp
         //public static void Run(Stream myBlob, string name, TraceWriter log)
         public async void Run(Stream myBlob, string name, TraceWriter log)
         {
-            log.Info($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
+            log.Info($"STARTED at {DateTime.Now}");
+            System.Diagnostics.Stopwatch chrono = System.Diagnostics.Stopwatch.StartNew();
+            log.Info($"Processing blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
+            
 
-            var apiKey = System.Configuration.ConfigurationManager.AppSettings["bingSpeedToTextApiKey"];
+            var apiKey = System.Configuration.ConfigurationManager.AppSettings["bingSpeechToTextApiKey"];
             log.Info($"Bing SpeechToText apiKey = {apiKey}");
 
             //*** retrieving a authentication bearer using the api key
@@ -62,7 +65,7 @@ namespace ClientTestApp
             using (var client = new System.Net.Http.HttpClient())
             {
                 // for recognize options, see https://docs.microsoft.com/en-us/azure/cognitive-services/speech/api-reference-rest/bingvoicerecognition
-                string recognizeScenarios = "ulm"; // smd, ulm ou websearch ???
+                string recognizeScenarios = "smd"; // smd, ulm ou websearch ???
                 string recognizeReqId = Guid.NewGuid().ToString(); 
                 string recognizeLocale = "fr-FR"; // for supported langage , see  https://docs.microsoft.com/en-us/azure/cognitive-services/speech/home#SpeechRecognition
                 string recognizeFormat = "json";
@@ -79,11 +82,13 @@ namespace ClientTestApp
                     var response = await client.PostAsync(requestUri, binaryContent);
                     var responseString = await response.Content.ReadAsStringAsync();
 
-                    log.Info($"RESULT: HttpStatus {response.StatusCode}"); 
+                    log.Info($"RESULT: HttpStatus : {(int)(response.StatusCode)} / {response.StatusCode}"); 
                     log.Info($"RESPONSE CONTENT : {responseString}");
                 }
             }
-
+            chrono.Stop();
+            log.Info($"TERMINATED at {DateTime.Now}");
+            log.Info($"ELAPSED TIME : {chrono.ElapsedMilliseconds}ms");
         }
     }
 

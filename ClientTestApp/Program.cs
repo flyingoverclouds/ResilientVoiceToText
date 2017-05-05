@@ -40,7 +40,7 @@ namespace ClientTestApp
         static void SimulateFunction()
         {
             VoiceToTextOnBlob_Function function = new VoiceToTextOnBlob_Function();
-            function.Simulate(@"C:\record\audio_1.wav");
+            function.Simulate(@"C:\record\audio_1_partial.wav");
         }
     }
 }
