@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Configuration;
 using System.Net.Http;
 
+
 public static async Task Run(Stream myBlob, string name, TraceWriter log)
 {
     log.Info($"STARTED at {DateTime.Now}");

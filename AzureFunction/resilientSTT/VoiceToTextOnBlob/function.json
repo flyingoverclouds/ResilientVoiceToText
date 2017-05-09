@@ -5,7 +5,7 @@
       "type": "blobTrigger",
       "direction": "in",
       "path": "audiofiles/{name}",
-      "connection": "resilientvttstore_STORAGE"
+      "connection": "resilientvttstore_STORAGE" 
     }
   ],
   "disabled": true

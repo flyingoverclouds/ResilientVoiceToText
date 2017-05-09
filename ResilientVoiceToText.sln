@@ -10,6 +10,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resilientSTT", "resilientSTT", "{612D53A2-EE0B-458E-B47A-4329AADBCCAC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VoiceToTextOnBlob", "VoiceToTextOnBlob", "{E52E497D-6FEA-4683-B990-65836C586BEC}"
+	ProjectSection(SolutionItems) = preProject
+		AzureFunction\resilientSTT\VoiceToTextOnBlob\function.json = AzureFunction\resilientSTT\VoiceToTextOnBlob\function.json
+		AzureFunction\resilientSTT\VoiceToTextOnBlob\project.json = AzureFunction\resilientSTT\VoiceToTextOnBlob\project.json
+		AzureFunction\resilientSTT\VoiceToTextOnBlob\run.csx = AzureFunction\resilientSTT\VoiceToTextOnBlob\run.csx
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

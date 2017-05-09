@@ -47,7 +47,7 @@ namespace ClientTestApp
                 var storageSasUri = new Uri(audioContainerSasUrl, UriKind.Absolute);
                 var audioContainer = new CloudBlobContainer(storageSasUri);
                 var audioBlob = audioContainer.GetBlockBlobReference(name);
-                try { await audioBlob.FetchAttributesAsync(); } catch { } // try to get metadata, ignoring error
+                try { await audioBlob.FetchAttributesAsync(); } catch { } // try to get metadata, ignoring error if blob does not exist
                 if (audioBlob.Metadata.ContainsKey("recognitionResult"))
                 {
                     log.Warning("METADATA ALREADY SET -> EXITING");
