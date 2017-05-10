@@ -12,8 +12,8 @@ namespace ClientTestApp
     {
         static void Main(string[] args)
         {
-            //SimulateClient();
-            SimulateFunction();
+            SimulateClient();
+            //SimulateFunction();
             Console.ReadLine();
         }
 
@@ -21,18 +21,14 @@ namespace ClientTestApp
         static void SimulateClient()
         {
             Console.WriteLine("Resilient VoiceToText architecture implementation.");
-            Console.WriteLine("upload target: " + ConfigurationManager.AppSettings["uploadSasUrl"]);
-            Console.WriteLine("apiUrl: " + ConfigurationManager.AppSettings["apiUrl"]);
+            Console.WriteLine("upload target: " + ConfigurationManager.AppSettings["audioContainerSasUrl"]);
 
-            var storageSasUri = new Uri(ConfigurationManager.AppSettings["uploadSasUrl"], UriKind.Absolute);
-            var resilientVttApiUri = new Uri(ConfigurationManager.AppSettings["apiUrl"], UriKind.Absolute);
-
+            var storageSasUri = new Uri(ConfigurationManager.AppSettings["audioContainerSasUrl"], UriKind.Absolute);
+            
             try
             {
                 var t = new ResilientVttTester();
-                t.RunTest(storageSasUri, resilientVttApiUri, @"C:\record\audio_1_partial.wav").GetAwaiter().GetResult();
-
-
+                t.RunTest(storageSasUri,@"C:\record\s1.wav").GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {

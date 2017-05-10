@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,60 +12,54 @@ namespace ClientTestApp
 {
     class ResilientVttTester
     {
-        public async Task RunTest(Uri sasAudioContainerUri, Uri apiUri, string fileToTest)
+        public async Task RunTest(Uri sasAudioContainerUri, string fileToTest)
         {
-            var rvtt = new ResilientVttServiceProxy(sasAudioContainerUri, apiUri);
+            Guid requestId = Guid.NewGuid(); // unique ID used as blob named (to avoid collide)
 
-            Stopwatch uploadChrono = Stopwatch.StartNew();
-            var reqId = await rvtt.UploadFileForVTT(fileToTest);
-            uploadChrono.Stop();
-            Console.WriteLine($"Elapsed time for upload : {uploadChrono.ElapsedMilliseconds}ms");
+            string newblobName = requestId.ToString() + System.IO.Path.GetExtension(fileToTest);
+            var audioContainer = new CloudBlobContainer(sasAudioContainerUri);
+            var audioBlob = audioContainer.GetBlockBlobReference(newblobName);
 
-            Console.WriteLine($"Updloaded file ID is: {reqId}");
-            if (reqId != Guid.Empty)
+
+            //**** UPLOADING AUDIO FILE AS BLOB
+            Stopwatch chrono = Stopwatch.StartNew();
+            if (!File.Exists(fileToTest))
             {
-                Console.WriteLine("Waiting for result ... ");
-                var storageSasUri = new Uri(ConfigurationManager.AppSettings["audioContainerSasUrl"], UriKind.Absolute);
-                var audioContainer = new CloudBlobContainer(storageSasUri);
-                var audioBlob = audioContainer.GetBlockBlobReference(reqId.ToString()+".wav");
+                throw new System.IO.FileNotFoundException($"{fileToTest} is not found.");
+            }
+            await audioBlob.UploadFromFileAsync(fileToTest);
+            chrono.Stop();
+            Console.WriteLine($"Elapsed time for upload : {chrono.ElapsedMilliseconds}ms");
 
-                string recognitionResult = null;
 
-                int counter = 0;
-                do
-                {
-                    if (counter>60) // if more than 20try to read metadata -> terminate wait
-                    {
-                        break;
-                    }
-                    await Task.Delay(1000); // pause between eaCh try
-                    Console.Write($"\rAttempt #{counter++}");
-                    audioBlob.FetchAttributes();
-                    if (audioBlob.Metadata.ContainsKey("recognitionResult"))
-                    { // result metadata found attached on the blob !!
-                        recognitionResult = audioBlob.Metadata["recognitionResult"];
-                        break;
-                    }
-
-                    var result = await rvtt.GetVttResult(reqId);
-                    if (!string.IsNullOrEmpty(result))
-                        break;
-                } while (true);
-                Console.WriteLine();
-                if (!string.IsNullOrEmpty(recognitionResult))
-                {
-                    Console.WriteLine("RECOGNITION RESULT : " + recognitionResult);
+            //**** WAITING FOR METADATA
+            Console.WriteLine("Waiting for voice recognition result ... ");
+            string recognitionResult = null;
+            chrono = Stopwatch.StartNew();
+            int counter = 0;
+            do
+            {
+                await Task.Delay(1000); // pause between each try
+                Console.Write($"\rAttempt #{counter++}");
+                    
+                audioBlob.FetchAttributes();
+                if (audioBlob.Metadata.ContainsKey("recognitionResult")) // if audio metadata found attached on the blob !!
+                { 
+                    recognitionResult = audioBlob.Metadata["recognitionResult"];
+                    break;
                 }
-                else
-                {
-                    Console.WriteLine(" WAIT TOOL LONG OR ERROR. VERIFY MANUALLY");
-                }
+            } while (counter<=30); // if more than 30tries to read metadata -> terminate polling
+
+            if (!string.IsNullOrEmpty(recognitionResult))
+            {
+                string vttResult = System.Text.Encoding.UTF8.GetString( Convert.FromBase64String(recognitionResult));
+                Console.WriteLine("\nRECOGNITION RESULT : " + vttResult);
             }
             else
-            {
-                Console.WriteLine("No ID returned --> something failed :(");
-            }
-            
+                Console.WriteLine("\nWAIT TOO LONG OR ERROR. VERIFY MANUALLY !!");
+            chrono.Stop();
+            Console.WriteLine($"Elapsed time for recognition result : {chrono.ElapsedMilliseconds}ms");
+
         }
     }
 }

@@ -72,7 +72,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VoiceToTextOnBlob_Function.cs" />
-    <Compile Include="ResilientVttServiceProxy.cs" />
     <Compile Include="ResilientVttTester.cs" />
   </ItemGroup>
   <ItemGroup>
