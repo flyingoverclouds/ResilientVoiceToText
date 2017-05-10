@@ -17,20 +17,14 @@ public static async Task Run(Stream myBlob, string name, TraceWriter log)
         var storageSasUri = new Uri(audioContainerSasUrl, UriKind.Absolute);
         var audioContainer = new CloudBlobContainer(storageSasUri);
         var audioBlob = audioContainer.GetBlockBlobReference(name);
-        try { await audioBlob.FetchAttributesAsync(); } catch { } // try to get metadata, ignoring error if blob does not exist
-        if (audioBlob.Metadata.ContainsKey("recognitionResult"))
+        try { await audioBlob.FetchAttributesAsync(); } catch { } // try to get metadata, ignoring error if blob does not exist 
+        if (audioBlob.Metadata.ContainsKey("recognitionResult"))// AVOIDING A INFINITE LOOP IF VoiceToText METADATA ALREADY SET
         {
-            log.Info("AVOIDING LOOP");
-            // AVOIDING A INFINITE LOOP IF METADATA ALREADY SET
+            log.Info("VoiceToText metadata found. EXITING.");
             return;
         }
-        else
-        {
-            log.Info("NO 'recognitionResult' METADATA ON BLOB ");
-        }
-        return;
 
-        //*** retrieving a authentication bearer using the api key
+        //*** retrieving a authentication bearer using the cognitive api key
         string bearerToken = null;
         using (var authTokenClient = new System.Net.Http.HttpClient())
         {
@@ -49,7 +43,7 @@ public static async Task Run(Stream myBlob, string name, TraceWriter log)
         }
         log.Info($"audioContent byte array size : {audioContent.Length}");
 
-        //*** calling cognitive service SpeechToText api
+        //*** calling cognitive service Bing SpeechToText api
         using (var client = new HttpClient())
         {
             // for recognize options, see https://docs.microsoft.com/en-us/azure/cognitive-services/speech/api-reference-rest/bingvoicerecognition
@@ -65,11 +59,13 @@ public static async Task Run(Stream myBlob, string name, TraceWriter log)
 
             using (var binaryContent = new ByteArrayContent(audioContent))
             {
+                //*** Sending audio content to api 
                 binaryContent.Headers.TryAddWithoutValidation("content-type", "audio/wav; codec=\"audio/pcm\"; samplerate=16000");
 
                 var response = await client.PostAsync(requestUri, binaryContent);
                 var responseString = await response.Content.ReadAsStringAsync();
 
+                //*** parsing api response
                 log.Info($"RESULT: HttpStatus : {(int)(response.StatusCode)} / {response.StatusCode}");
                 string recognitionResultMetadata = "";
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
@@ -82,11 +78,10 @@ public static async Task Run(Stream myBlob, string name, TraceWriter log)
                     recognitionResultMetadata = responseString;
                 }
 
-                //*** Attaching result metadat to original blob
-
-                audioBlob.Metadata["recognitionResult"] = DateTime.Now.ToString("u") + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(recognitionResultMetadata));
+                //*** Attaching result metadata (base64 encoding) to original blob : 
+                audioBlob.Metadata["recognitionResult"] = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(recognitionResultMetadata));
                 await audioBlob.SetMetadataAsync();
-                log.Info("METADATA set ok.");
+                log.Info("Audio metadata attached to blob.");
             }
         }
     }
