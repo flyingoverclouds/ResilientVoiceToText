@@ -1,0 +1,3 @@
+bingSpeechToTextApiKey : fbd2b75344904e75836923915aae869a
+audioContainerSasUrl : https://resilientvttstore.blob.core.windows.net/audiofiles?st=2017-05-10T08%3A55%3A00Z&se=2017-07-11T08%3A55%3A00Z&sp=rwdl&sv=2016-05-31&sr=c&sig=XISPTo3PSSV%2FhnqepRsWPl13YbSLQdifzHohRM1fQIc%3D
+
