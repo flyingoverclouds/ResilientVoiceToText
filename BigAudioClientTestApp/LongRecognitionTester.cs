@@ -11,8 +11,11 @@ namespace BigAudioClientTestApp
 {
     // NUGET  ADD : Microsoft.Bing.Speech
 
+    // https://docs.microsoft.com/en-us/azure/cognitive-services/speech/api-reference-rest/bingvoicerecognition
+    // https://github.com/Azure-Samples/Cognitive-Speech-STT-ServiceLibrary
 
-     class LongRecognitionTester
+
+    class LongRecognitionTester
     {
         
         public async Task<string> RecognizeFile(Stream audio)
