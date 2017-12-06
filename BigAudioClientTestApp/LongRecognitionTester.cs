@@ -18,17 +18,12 @@ namespace BigAudioClientTestApp
     class LongRecognitionTester
     {
         
-        public async Task<string> RecognizeFile(Stream audio)
-        {
-            string authKey = System.Configuration.ConfigurationManager.AppSettings["bingSpeechToTextApiKey"];
-
-            // for url composition, see : https://docs.microsoft.com/en-us/azure/cognitive-services/speech/api-reference-rest/bingvoicerecognition
-            Uri LongDictationUrl = new Uri(@"wss://speech.platform.bing.com/api/service/recognition/continuous");
-
-            var cts = new CancellationTokenSource();
+        public async Task<string> RecognizeFile(Stream audio,string stsUrl,string authKey, Uri longDictationUrl)
+        {          var cts = new CancellationTokenSource();
 
             // create the preferences object
-            var preferences = new Preferences("fr-FR", LongDictationUrl, new CognitiveServicesAuthorizationProvider(authKey));
+            var preferences = new Preferences("en-US", longDictationUrl, 
+                new CognitiveServicesAuthorizationProvider(stsUrl,authKey));
 
             List<RecognitionResult> results = new List<RecognitionResult>();
 

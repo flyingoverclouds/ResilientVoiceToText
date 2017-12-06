@@ -10,32 +10,33 @@ namespace BigAudioClientTestApp
 {
     public sealed class CognitiveServicesAuthorizationProvider : IAuthorizationProvider
     {
-        /// <summary>
-        /// The fetch token URI
-        /// </summary>
-        private const string FetchTokenUri = "https://api.cognitive.microsoft.com/sts/v1.0";
-
+   
         /// <summary>
         /// The subscription key
         /// </summary>
         private readonly string subscriptionKey;
 
         /// <summary>
+        /// STS url to retrieve auth token
+        /// </summary>
+        private readonly string stsUrl;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CognitiveServicesAuthorizationProvider" /> class.
         /// </summary>
         /// <param name="subscriptionKey">The subscription identifier.</param>
-        public CognitiveServicesAuthorizationProvider(string subscriptionKey)
+        public CognitiveServicesAuthorizationProvider(string stsUrl,string subscriptionKey)
         {
-            if (subscriptionKey == null)
-            {
-                throw new ArgumentNullException(nameof(subscriptionKey));
-            }
-
-            if (string.IsNullOrWhiteSpace(subscriptionKey))
+            if (string.IsNullOrEmpty(subscriptionKey))
             {
                 throw new ArgumentException(nameof(subscriptionKey));
             }
+            if (string.IsNullOrEmpty(stsUrl))
+            {
+                throw new ArgumentException(nameof(stsUrl));
+            }
 
+            this.stsUrl = stsUrl;
             this.subscriptionKey = subscriptionKey;
         }
 
@@ -50,7 +51,7 @@ namespace BigAudioClientTestApp
         /// </remarks>
         public Task<string> GetAuthorizationTokenAsync()
         {
-            return FetchToken(FetchTokenUri, this.subscriptionKey);
+            return FetchToken(stsUrl, this.subscriptionKey);
         }
 
         /// <summary>
