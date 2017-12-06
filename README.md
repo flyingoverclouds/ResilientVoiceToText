@@ -5,3 +5,5 @@ We had a little talk around cloud pattern, connexion glitch and gremlins, enviro
 We design a different architecture ni order to make the application more resilient,  highly increasing the felt stability and usage efficiency.
 
 
+## Update
+- 6/dec/2017 : support of CustomSpeech (aka CRIS) deployment in the BigAudio sample
