@@ -6,4 +6,4 @@ We design a different architecture ni order to make the application more resilie
 
 
 ## Update
-- 6/dec/2017 : support of CustomSpeech (aka CRIS) deployment in the BigAudio sample
+- 6/dec/2017 : support of CustomSpeech (aka CRIS) deployment in the BigAudio sample  : STS url is now configurable see Main() in sample  https://github.com/flyingoverclouds/ResilientVoiceToText/blob/master/BigAudioClientTestApp/Program.cs
